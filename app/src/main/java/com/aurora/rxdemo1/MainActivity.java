@@ -9,6 +9,7 @@ import android.widget.TextView;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.observers.DisposableObserver;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
@@ -22,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
     private DisposableObserver<String> myDisposableObserver;
     TextView txtGreeting;
    // private Disposable disposable;
+    CompositeDisposable compositeDisposable=new CompositeDisposable();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,12 +81,14 @@ public class MainActivity extends AppCompatActivity {
 
             }
         };
+        compositeDisposable.add(myDisposableObserver);
         myObservable.subscribe(myDisposableObserver);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        myDisposableObserver.dispose();
+       // myDisposableObserver.dispose();
+        compositeDisposable.clear();
     }
 }
